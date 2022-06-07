@@ -16,7 +16,9 @@ class MyApp extends StatelessWidget {
       title: 'Posts App',
       theme: appTheme,
       home: Scaffold(
-        appBar: AppBar(title: Text("posts"),),
+        appBar: AppBar(
+          title: Text("posts"),
+        ),
         body: Center(
           child: Text('posts'),
         ),
@@ -24,4 +26,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

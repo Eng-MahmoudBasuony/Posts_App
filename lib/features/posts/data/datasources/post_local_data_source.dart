@@ -11,15 +11,13 @@ abstract class PostLocalDataSource {
 
 const CACHED_POSTS = "CACHED_POSTS";
 
-class PostLocalDataSourceImpl implements PostLocalDataSource{
-
+class PostLocalDataSourceImpl implements PostLocalDataSource {
   final SharedPreferences sharedPreferences;
 
   PostLocalDataSourceImpl({required this.sharedPreferences});
 
   @override
   Future<Unit> cachePosts(List<PostModel> postModels) {
-
     List postModelsToJson = postModels
         .map<Map<String, dynamic>>((postModel) => postModel.toJson())
         .toList();
@@ -28,21 +26,17 @@ class PostLocalDataSourceImpl implements PostLocalDataSource{
   }
 
   @override
-  Future<List<PostModel>> getCachedPosts()
-  {
+  Future<List<PostModel>> getCachedPosts() {
     final jsonString = sharedPreferences.getString(CACHED_POSTS);
 
-    if (jsonString != null)
-    {
+    if (jsonString != null) {
       List decodeJsonData = json.decode(jsonString);
       List<PostModel> jsonToPostModels = decodeJsonData
           .map<PostModel>((jsonPostModel) => PostModel.fromJson(jsonPostModel))
           .toList();
       return Future.value(jsonToPostModels);
-    } else
-    {
+    } else {
       throw EmptyCacheException();
     }
   }
-
 }

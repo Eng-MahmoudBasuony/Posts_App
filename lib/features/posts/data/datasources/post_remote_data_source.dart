@@ -12,7 +12,6 @@ abstract class PostRemoteDataSource {
   Future<Unit> addPost(PostModel postModel);
 }
 
-
 const BASE_URL = "https://jsonplaceholder.typicode.com";
 
 class PostRemoteDataSourceImpl implements PostRemoteDataSource {
@@ -22,7 +21,6 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
   @override
   Future<List<PostModel>> getAllPosts() async {
-
     final response = await client.get(
       Uri.parse(BASE_URL + "/posts/"),
       headers: {"Content-Type": "application/json"},
@@ -49,10 +47,9 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
     };
 
     final response =
-    await client.post(Uri.parse(BASE_URL + "/posts/"), body: body);
+        await client.post(Uri.parse(BASE_URL + "/posts/"), body: body);
 
-    if (response.statusCode == 201)
-    {
+    if (response.statusCode == 201) {
       return Future.value(unit);
     } else {
       throw ServerException();
@@ -61,7 +58,6 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
   @override
   Future<Unit> deletePost(int postId) async {
-
     final response = await client.delete(
       Uri.parse(BASE_URL + "/posts/${postId.toString()}"),
       headers: {"Content-Type": "application/json"},

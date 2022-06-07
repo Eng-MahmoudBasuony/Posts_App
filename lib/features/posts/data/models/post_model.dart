@@ -1,6 +1,6 @@
 import 'package:clean_architecture_add_posts/features/posts/domain/entities/post.dart';
 
-class PostModel extends Post{
+class PostModel extends Post {
   const PostModel({int? id, required String title, required String body})
       : super(id: id, title: title, body: body);
 
@@ -11,5 +11,4 @@ class PostModel extends Post{
   Map<String, dynamic> toJson() {
     return {'id': id, 'title': title, 'body': body};
   }
-
 }

@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../repositories/posts_repository.dart';
 
-class DeletePostUsecase{
+class DeletePostUsecase {
   final PostsRepository repository;
   DeletePostUsecase(this.repository);
 

@@ -9,7 +9,6 @@ import '../datasources/post_local_data_source.dart';
 import '../datasources/post_remote_data_source.dart';
 import '../models/post_model.dart';
 
-
 typedef Future<Unit> DeleteOrUpdateOrAddPost();
 
 class PostsRepositoryImpl implements PostsRepository {
@@ -19,8 +18,8 @@ class PostsRepositoryImpl implements PostsRepository {
 
   PostsRepositoryImpl(
       {required this.remoteDataSource,
-        required this.localDataSource,
-        required this.networkInfo});
+      required this.localDataSource,
+      required this.networkInfo});
   @override
   Future<Either<Failure, List<Post>>> getAllPosts() async {
     if (await networkInfo.isConnected) {
@@ -60,13 +59,12 @@ class PostsRepositoryImpl implements PostsRepository {
   @override
   Future<Either<Failure, Unit>> updatePost(Post post) async {
     final PostModel postModel =
-    PostModel(id: post.id, title: post.title, body: post.body);
+        PostModel(id: post.id, title: post.title, body: post.body);
 
     return await _getMessage(() {
       return remoteDataSource.updatePost(postModel);
     });
   }
-
 
 // this method for non code duplication
   Future<Either<Failure, Unit>> _getMessage(
