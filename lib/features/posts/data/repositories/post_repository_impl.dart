@@ -4,6 +4,7 @@ import 'package:clean_architecture_add_posts/features/posts/domain/repositories/
 import 'package:dartz/dartz.dart';
 
 import '../datasources/post_local_data_source.dart';
+import '../datasources/post_remote_data_source.dart';
 
 class PostsRepositoryImpl implements PostsRepository
 {
