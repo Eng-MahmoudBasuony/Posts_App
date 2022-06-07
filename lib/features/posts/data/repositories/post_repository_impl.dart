@@ -3,8 +3,16 @@ import 'package:clean_architecture_add_posts/features/posts/domain/entities/post
 import 'package:clean_architecture_add_posts/features/posts/domain/repositories/posts_repository.dart';
 import 'package:dartz/dartz.dart';
 
+import '../datasources/post_local_data_source.dart';
+
 class PostsRepositoryImpl implements PostsRepository
 {
+
+
+  final PostRemoteDataSource remoteDataSource;
+  final PostLocalDataSource localDataSource;
+  final NetworkInfo networkInfo;
+
   @override
   Future<Either<Failure, Unit>> addPost(Post post) {
     // TODO: implement addPost
