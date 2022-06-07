@@ -3,8 +3,11 @@ import 'package:clean_architecture_add_posts/features/posts/domain/entities/post
 import 'package:clean_architecture_add_posts/features/posts/domain/repositories/posts_repository.dart';
 import 'package:dartz/dartz.dart';
 
+import '../../../../core/error/exceptions.dart';
+import '../../../../core/network/network_info.dart';
 import '../datasources/post_local_data_source.dart';
 import '../datasources/post_remote_data_source.dart';
+import '../models/post_model.dart';
 
 class PostsRepositoryImpl implements PostsRepository
 {
@@ -19,27 +22,67 @@ class PostsRepositoryImpl implements PostsRepository
         required this.networkInfo});
 
   @override
-  Future<Either<Failure, Unit>> addPost(Post post) {
-    // TODO: implement addPost
-    throw UnimplementedError();
+  Future<Either<Failure, List<Post>>> getAllPosts() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final remotePosts = await remoteDataSource.getAllPosts();
+        localDataSource.cachePosts(remotePosts);
+        return Right(remotePosts);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      try {
+        final localPosts = await localDataSource.getCachedPosts();
+        return Right(localPosts);
+      } on EmptyCacheException {
+        return Left(EmptyCacheFailure());
+      }
+    }
   }
 
   @override
-  Future<Either<Failure, Unit>> deletePost(int id) {
-    // TODO: implement deletePost
-    throw UnimplementedError();
+  Future<Either<Failure, Unit>> addPost(Post post) async {
+    final PostModel postModel = PostModel(title: post.title, body: post.body);
+
+    return await _getMessage(() {
+      return remoteDataSource.addPost(postModel);
+    });
   }
 
   @override
-  Future<Either<Failure, List<Post>>> getAllPosts() {
-    // TODO: implement getAllPosts
-    throw UnimplementedError();
+  Future<Either<Failure, Unit>> deletePost(int postId) async {
+    return await _getMessage(() {
+      return remoteDataSource.deletePost(postId);
+    });
   }
 
   @override
-  Future<Either<Failure, Unit>> updatePost(Post post) {
-    // TODO: implement updatePost
-    throw UnimplementedError();
+  Future<Either<Failure, Unit>> updatePost(Post post) async {
+    final PostModel postModel =
+    PostModel(id: post.id, title: post.title, body: post.body);
+
+    return await _getMessage(() {
+      return remoteDataSource.updatePost(postModel);
+    });
   }
 
+
+  // this method for non code duplication
+  Future<Either<Failure, Unit>> _getMessage(Future<Unit> Function() deleteOrUpdateOrAddPost) async
+  {
+      if (await networkInfo.isConnected)
+      {
+      try {
+        await deleteOrUpdateOrAddPost();
+        return Right(unit);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    }
+      else
+      {
+      return Left(OfflineFailure());
+    }
+  }
 }
