@@ -8,5 +8,4 @@ abstract class PostsEvent extends Equatable {
 }
 
 class GetAllPostsEvent extends PostsEvent {}
-
 class RefreshPostsEvent extends PostsEvent {}
