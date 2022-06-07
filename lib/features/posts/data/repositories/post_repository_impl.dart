@@ -13,6 +13,10 @@ class PostsRepositoryImpl implements PostsRepository
   final PostRemoteDataSource remoteDataSource;
   final PostLocalDataSource localDataSource;
   final NetworkInfo networkInfo;
+  PostsRepositoryImpl(
+      {required this.remoteDataSource,
+        required this.localDataSource,
+        required this.networkInfo});
 
   @override
   Future<Either<Failure, Unit>> addPost(Post post) {
