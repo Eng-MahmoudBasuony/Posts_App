@@ -9,18 +9,18 @@ import '../datasources/post_local_data_source.dart';
 import '../datasources/post_remote_data_source.dart';
 import '../models/post_model.dart';
 
-class PostsRepositoryImpl implements PostsRepository
-{
 
+typedef Future<Unit> DeleteOrUpdateOrAddPost();
 
+class PostsRepositoryImpl implements PostsRepository {
   final PostRemoteDataSource remoteDataSource;
   final PostLocalDataSource localDataSource;
   final NetworkInfo networkInfo;
+
   PostsRepositoryImpl(
       {required this.remoteDataSource,
         required this.localDataSource,
         required this.networkInfo});
-
   @override
   Future<Either<Failure, List<Post>>> getAllPosts() async {
     if (await networkInfo.isConnected) {
@@ -68,20 +68,17 @@ class PostsRepositoryImpl implements PostsRepository
   }
 
 
-  // this method for non code duplication
-  Future<Either<Failure, Unit>> _getMessage(Future<Unit> Function() deleteOrUpdateOrAddPost) async
-  {
-      if (await networkInfo.isConnected)
-      {
+// this method for non code duplication
+  Future<Either<Failure, Unit>> _getMessage(
+      DeleteOrUpdateOrAddPost deleteOrUpdateOrAddPost) async {
+    if (await networkInfo.isConnected) {
       try {
         await deleteOrUpdateOrAddPost();
         return Right(unit);
       } on ServerException {
         return Left(ServerFailure());
       }
-    }
-      else
-      {
+    } else {
       return Left(OfflineFailure());
     }
   }
