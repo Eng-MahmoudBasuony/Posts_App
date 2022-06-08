@@ -11,6 +11,7 @@ class PostsInitial extends PostsState {}
 class LoadingPostsState extends PostsState {}
 
 
+//this state (List<Post>)
 class LoadedPostsState extends PostsState {
   final List<Post> posts;
 
@@ -20,6 +21,7 @@ class LoadedPostsState extends PostsState {
   List<Object> get props => [posts];
 }
 
+//this state (List<Post>)
 class ErrorPostsState extends PostsState {
   final String message;
 
